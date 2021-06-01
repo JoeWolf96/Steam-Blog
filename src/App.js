@@ -12,7 +12,7 @@ import Nav from './components/Nav'
 // more on React environment variables
 // https://create-react-app.dev/docs/adding-custom-environment-variables/
 
-let baseUrl = process.env.REACT_APP_BACKENDURL
+let baseUrl = 'http://localhost:3005'
 console.log(baseUrl)
 // let baseUrl = 'http://localhost:3003'
 
@@ -113,7 +113,8 @@ class App extends Component {
   }
 
   deletePosts = async (id) => {
-    const url = baseUrl + '/posts/' + id
+    console.log('works')
+    const url = baseUrl + '/blog/' + id
 
     try{
       const response = await fetch( url, {
@@ -123,13 +124,14 @@ class App extends Component {
 
       if (response.status===200){
 
-        const findIndex = this.state.posts.findIndex(topics => topics._id === id)
+        const findIndex = this.state.posts.findIndex(posts => posts._id === id)
         const copyPosts = [...this.state.posts]
         copyPosts.splice(findIndex, 1)
 
         this.setState({
-          topics: copyPosts
+          posts: copyPosts
         })
+        console.log(this.state.posts)
       }
 
     }
@@ -142,7 +144,7 @@ class App extends Component {
 
 handleSubmit = async (e) => {
   e.preventDefault()
-    const url = baseUrl + '/posts/' + this.state.postsToBeEdited._id
+    const url = baseUrl + '/blog/' + this.state.postsToBeEdited._id
     console.log(this.state.postsToBeEdited._id)
     try{
       const response = await fetch( url , {
@@ -164,7 +166,7 @@ handleSubmit = async (e) => {
         copyPosts[findIndex] = updatedPosts.data
 
         this.setState({
-          topics: copyPosts,
+          posts: copyPosts,
           modalOpen:false
         })
       }
@@ -197,6 +199,7 @@ handleSubmit = async (e) => {
   render () {
     console.log(this.state.posts)
 
+
     return (
       <div className="App">
         <Nav loggingUser={this.loggingUser} register={this.register}/>
@@ -204,9 +207,9 @@ handleSubmit = async (e) => {
           <h1> SteamSale </h1>
           <p class="intro">Look whats on sale!</p>
 
-        
+
         <p class="article1description">add comment</p>
-          <NewForm baseUrl={ baseUrl } addTopic={ this.addTopic } />
+          <NewForm baseUrl={ baseUrl } addTopic={ this.addPosts } />
 
           <PostsTable
             posts={this.state.posts}

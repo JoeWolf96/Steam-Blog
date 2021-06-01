@@ -1,7 +1,7 @@
 
 
 const PostsTable = (props)=>{
-  console.log(props.topics)
+  console.log(props.posts)
     return (
 
         <table>

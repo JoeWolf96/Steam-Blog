@@ -22,9 +22,9 @@ export default class NewForm extends Component {
   handleSubmit (event) {
     event.preventDefault()
     // fetch
-    let baseUrl = process.env.REACT_APP_BACKENDURL
+    let baseUrl = 'http://localhost:3005'
     console.log(baseUrl)
-    fetch(this.props.baseUrl + '/topics', {
+    fetch(this.props.baseUrl + '/blog', {
       method: 'POST',
       body: JSON.stringify({name: this.state.name}),
       headers: {
