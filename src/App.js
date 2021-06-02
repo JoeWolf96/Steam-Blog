@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import NewForm from './components/NewForm'
 import PostsTable from './components/PostsTable'
 import Nav from './components/Nav'
+import SteamView from './components/steamview'
 
 
 
@@ -22,6 +23,11 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      apiUrl:'https://api.steampowered.com/ISteamApps/GetAppList/v2/',
+      query: '&format=json',
+      apiKey:'?key=788BB881FB9E4532A765F61E7C1D7847',
+      steam:'',
+      appDetails:'',
       posts: [],
       modalOpen: false,
       postsToBeEdited:[],
@@ -194,7 +200,29 @@ handleSubmit = async (e) => {
       name: posts.name,
       postsToBeEdited:posts
     })
+
   }
+  handleSubmit2 = (event)=>{
+    event.preventDefault()
+    this.setState({
+      searchURL: this.state.apiUrl + this.state.apiKey + this.state.query
+    }, () => {
+      fetch(this.state.searchURL,{
+        mode: 'no-cors'
+      })
+      .then(response => {
+
+        return response.json()
+      }).then(json => this.setState({
+        steam: json,
+        appDetails: ''
+      }),
+      err => console.log(err))
+    })
+  }
+// handleChange2 (event) {
+//   this.setState({ [event.target.id]: event.target.value })
+// }
 
   render () {
     console.log(this.state.posts)
@@ -205,10 +233,21 @@ handleSubmit = async (e) => {
         <Nav loggingUser={this.loggingUser} register={this.register}/>
 
           <h1> SteamSale </h1>
-          <p class="intro">Look whats on sale!</p>
-
-
-        <p class="article1description">add comment</p>
+          <p class="intro">peepee</p>
+          <>
+          <form onSubmit={this.handleSubmit2}>
+            <label htmlFor='appDetails'>Title</label>
+            <input
+              type='submit'
+              value='find game info'
+            />
+          </form>
+          {(this.state.steam)
+            ? <appDetails steam={this.state.steam} />
+            : ''
+          }
+        </>
+          <p class="article1description">add comment</p>
           <NewForm baseUrl={ baseUrl } addTopic={ this.addPosts } />
 
           <PostsTable
