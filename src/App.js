@@ -9,9 +9,10 @@ import SteamView from './components/steamview'
 
 
 
+
 // more on React environment variables
 // https://create-react-app.dev/docs/adding-custom-environment-variables/
-
+const music="./background.mp3"
 let baseUrl = 'http://localhost:3005'
 console.log(baseUrl)
 // let baseUrl = 'http://localhost:3003'
@@ -22,17 +23,19 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      apiUrl:'https://api.steampowered.com/ISteamApps/GetAppList/v2/',
-      query: '&format=json',
-      apiKey:'?key=788BB881FB9E4532A765F61E7C1D7847',
+
       steam:'',
-      appDetails:'',
+      prices:'',
       posts: [],
       modalOpen: false,
       postsToBeEdited:[],
       name: '',
-      userLogedIn: false
+      userLogedIn: false,
+
     }
+
+
+
 
   }
 
@@ -196,6 +199,7 @@ handleSubmit = async (e) => {
     })
 
   }
+  //api stuff
   getAPI = (event)=>{
     // event.preventDefault()
     console.log('test')
@@ -216,86 +220,87 @@ handleSubmit = async (e) => {
       })
      })
   }
-  addToFavourite= async (steam) => {
-    const url = baseUrl + '/steam/' + steam.applist.apps.appid
+  getPRICE = (event)=>{
+    // event.preventDefault()
+    console.log('testPrice')
+    fetch(baseUrl + "/steam/price",{
+      credentials: "include"
+    })
+    .then(res => {
+      if (res.status===200){
+        return res.json()
+      }
+      else {
+        return []
+      }
+    }).then(data => {
 
-    try{
-
-      const response = await fetch( url , {
-        method: 'PUT',
-        body: JSON.stringify({
-          likes: steam.favourites+1
-        }),
-        headers: {
-          'Content-Type' : 'application/json'
-        },
-        credentials: "include"
+      this.setState({
+        prices: data,
       })
-    }
-    catch(err){
-      console.log('Error => ', err);
-    }
-
+     })
   }
-
-
+  //music stuff
 
   componentDidMount() {
-    this.getAPI()
-  }
+   this.getAPI()
+
+ }
 // handleChange2 (event) {
 //   this.setState({ [event.target.id]: event.target.value })
 // }
 
   render () {
-    console.log(this.state.posts)
 
-    console.log(this.state.steam.applist)
 
 
     return (
       <div className="App">
 
-        <Nav loggingUser={this.loggingUser} register={this.register}/>
-        <div className="intro">
-
-          <h1> SteamData </h1>
-          </div>
-
-          <p>Steam Games in Evidence</p>
-
-          { this.state.steam
-            &&
-          <SteamView
-
-            steam={this.state.steam}
-
-            //addToFavourite
-            />
-
-          }
+      <Nav loggingUser={this.loggingUser} register={this.register}/>
 
 
-          <p class="article1description">add comment</p>
-          <NewForm baseUrl={ baseUrl } addTopic={ this.addPosts } />
+      <div className="intro">
 
-          <PostsTable
-            posts={this.state.posts}
-            deletePosts={this.deletePosts}
-            showEditForm={this.showEditForm}
-            />
-          <br/>
-          <br/>
+      <h1> SteamDb </h1>
+      </div>
 
-          {this.state.modalOpen &&
 
-            <form onSubmit={this.handleSubmit}>
-              <label>Edit: </label>
-              <input name="name" value={this.state.name} onChange={this.handleChange}/> <br/>
-              <button>submit Edit</button>
+      <p>Take a look at the latest Steam Releases</p>
+      
 
-            </form>
-          }
+      { this.state.steam
+        &&
+        <SteamView
+
+        steam={this.state.steam}
+
+        //addToFavourite
+        />
+
+      }
+
+
+      <p class="article1description">Add To Your Favourites</p>
+      <NewForm baseUrl={ baseUrl } addTopic={ this.addPosts } />
+
+      <PostsTable
+      posts={this.state.posts}
+      deletePosts={this.deletePosts}
+      showEditForm={this.showEditForm}
+      />
+      <br/>
+      <br/>
+
+      {this.state.modalOpen &&
+
+        <form onSubmit={this.handleSubmit}>
+        <label>Edit: </label>
+        <input name="name" value={this.state.name} onChange={this.handleChange}/> <br/>
+        <button>submit Edit</button>
+
+        </form>
+      }
       </div>
     );
   }

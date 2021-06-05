@@ -11,18 +11,39 @@
     ". . .";
 }
 .music { grid-area: music; }
-.intro { grid-area: intro; }
+.intro {
+  animation-duration: 3s;
+  animation-name: slidein;
+}
+
+@keyframes slidein {
+  from {
+    margin-left: 100%;
+    width: 300%;
+  }
+
+  to {
+    margin-left: 4%;
+    width: 100%;
+  }
+}
 .login { grid-area: login; }
 
 .comments { grid-area: comments; }
 
+.Favourites{
+  background-color: rgba(237, 149, 17,0.6);
+  color:white;
 
+}
 .table{
-  height: "400px";
+  overflow: hidden;
+
   display:grid;
   grid-area: api;
   color:black;
-  background-color: rgba(255,255,255,0.5);
+  background-color: rgba(255,255,255,0.6);
+  margin:20px;
   display:flex;
   flex-direction: column;
   flex:auto;
@@ -30,16 +51,21 @@
 body{
 
   color:white;
-  background-image: url('https://i.imgur.com/OE8PHQP.png');
+  background-image: url('https://i.imgur.com/TN3qHiB.jpg');
   background-size: fill;
   background-repeat: no-repeat;
-  background-color: black;
+  background-color:black;
   }
   .userstuff{
+    animation-duration: 3s;
+    animation-name: slidein;
+
     border: 35px;
     margin:50px;
-    text-align: right;
+    max-width:350px;
+    text-align: left;
     color:white;
+    background-color: rgba(0,255,255,0.6);
   }
   .comment{
 

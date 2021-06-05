@@ -47,9 +47,9 @@ export default class NewForm extends Component {
     return (
       <form onSubmit={this.handleSubmit}>
       <div class="comment">
-        <label htmlFor="name">Add a comment : </label>
+        <label htmlFor="name">Favourite : </label>
         <input type="text" id="name" name="name" onChange={ (evt) => this.handleChange(evt) } value={ this.state.name } />
-        <input type="submit" value="send comment"  />
+        <input type="submit" value="ADD"  />
         </div>
       </form>
     )

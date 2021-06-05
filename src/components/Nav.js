@@ -4,6 +4,7 @@ export default function Nav(props) {
         <nav>
         <div class="userstuff">
 
+
             <form onSubmit={props.loggingUser}>
                 <strong>Login</strong>
                 <label htmlFor="name">Username: </label>

@@ -4,7 +4,9 @@ const PostsTable = (props)=>{
   console.log(props.posts)
     return (
 
+
         <table>
+          <div className="Favourites">
             <tbody>
                 {props.posts.map(posts => {
                     return (
@@ -17,12 +19,14 @@ const PostsTable = (props)=>{
                     })
                 }
             </tbody>
+              </div>
 
         </table>
 
 
 
     )
+
 
 }
 

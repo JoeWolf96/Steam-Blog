@@ -1,13 +1,14 @@
 import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import TableScrollbar from 'react-table-scrollbar';
 
 const SteamView = (props)=>{
   console.log(props.steam.applist.apps)
 
-  const steamSliced= props.steam.applist.apps.slice(300,350)
-  console.log(steamSliced)
+  const steamSliced= props.steam.applist.apps.slice(0,10000)
+
     return (
-      <PerfectScrollbar>
+      <TableScrollbar rows={15}>
       <div className="table">
       <table>
           <tbody>
@@ -17,12 +18,9 @@ const SteamView = (props)=>{
                 return(
                   <tr key={steam.appid} >
                   <tr>{steam.name}</tr>
-
                  </tr>
 
               )
-
-
 
 
                   })
@@ -31,7 +29,7 @@ const SteamView = (props)=>{
 
       </table>
       </div>
-      </PerfectScrollbar>
+      </TableScrollbar>
 
 
 )
