@@ -9,7 +9,6 @@ import SteamView from './components/steamview'
 
 
 
-
 // more on React environment variables
 // https://create-react-app.dev/docs/adding-custom-environment-variables/
 
@@ -183,11 +182,6 @@ handleSubmit = async (e) => {
   }
 
 
-
-  componentDidMount() {
-    this.getPosts()
-  }
-
   handleChange = (e)=>{
     this.setState({
       [e.target.name]: e.target.value
@@ -202,23 +196,52 @@ handleSubmit = async (e) => {
     })
 
   }
-  handleSubmit2 = (event)=>{
-    event.preventDefault()
-    this.setState({
-      searchURL: this.state.apiUrl + this.state.apiKey + this.state.query
-    }, () => {
-      fetch(this.state.searchURL,{
-        mode: 'no-cors'
-      })
-      .then(response => {
-
-        return response.json()
-      }).then(json => this.setState({
-        steam: json,
-        appDetails: ''
-      }),
-      err => console.log(err))
+  getAPI = (event)=>{
+    // event.preventDefault()
+    console.log('test')
+    fetch(baseUrl + "/steam/",{
+      credentials: "include"
     })
+    .then(res => {
+      if (res.status===200){
+        return res.json()
+      }
+      else {
+        return []
+      }
+    }).then(data => {
+
+      this.setState({
+        steam: data,
+      })
+     })
+  }
+  addToFavourite= async (steam) => {
+    const url = baseUrl + '/steam/' + steam.applist.apps.appid
+
+    try{
+
+      const response = await fetch( url , {
+        method: 'PUT',
+        body: JSON.stringify({
+          likes: steam.favourites+1
+        }),
+        headers: {
+          'Content-Type' : 'application/json'
+        },
+        credentials: "include"
+      })
+    }
+    catch(err){
+      console.log('Error => ', err);
+    }
+
+  }
+
+
+
+  componentDidMount() {
+    this.getAPI()
   }
 // handleChange2 (event) {
 //   this.setState({ [event.target.id]: event.target.value })
@@ -227,26 +250,32 @@ handleSubmit = async (e) => {
   render () {
     console.log(this.state.posts)
 
+    console.log(this.state.steam.applist)
+
 
     return (
       <div className="App">
-        <Nav loggingUser={this.loggingUser} register={this.register}/>
 
-          <h1> SteamSale </h1>
-          <p class="intro">peepee</p>
-          <>
-          <form onSubmit={this.handleSubmit2}>
-            <label htmlFor='appDetails'>Title</label>
-            <input
-              type='submit'
-              value='find game info'
+        <Nav loggingUser={this.loggingUser} register={this.register}/>
+        <div className="intro">
+
+          <h1> SteamData </h1>
+          </div>
+
+          <p>Steam Games in Evidence</p>
+
+          { this.state.steam
+            &&
+          <SteamView
+
+            steam={this.state.steam}
+
+            //addToFavourite
             />
-          </form>
-          {(this.state.steam)
-            ? <appDetails steam={this.state.steam} />
-            : ''
+
           }
-        </>
+
+
           <p class="article1description">add comment</p>
           <NewForm baseUrl={ baseUrl } addTopic={ this.addPosts } />
 
